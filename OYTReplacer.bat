@@ -1,5 +1,7 @@
 @echo off
-cd /d "%~dp0"
+cd /d "%~dp0" & cls
+:: Get Administrator Rights
+echo We need Administrator rights to modify the system. Please allow.
 cacls.exe "%SystemDrive%\System Volume Information" >nul 2>nul
 if %errorlevel%==0 goto Admin
 if exist "%temp%\getadmin.vbs" del /f /q "%temp%\getadmin.vbs"
@@ -10,18 +12,17 @@ echo WScript.Quit >>"%temp%\getadmin.vbs"
 if exist "%temp%\getadmin.vbs" del /f /q "%temp%\getadmin.vbs"
 exit
 :Admin
-
 SETLOCAL ENABLEEXTENSIONS
-cd /d "%~dp0"
-
-echo Welcome to YaHei Font Replacer.
+cd /d "%~dp0" & cls
+echo Welcome to Open YaHei Terminator Project - Batch replacer.
+echo A simply Batch script for replace the MS YaHei font.
 echo Original work by Moeologist, Modified by Lapis Apple
 echo.
 echo Use at your own risk. This may hurt your system!
 echo.
 echo.
 echo You have to delete the registry before you replace the system font.
-echo In addition a logout is required to apply the changes so save your work right now!
+echo In addition a logout is also required to apply the changes. Save your work right now!
 echo.
 echo Have you already deleted the registry?
 echo If you haven't deleted it type 'D' and we'll delete it for you.
@@ -30,8 +31,18 @@ echo Type 'E' to leave the script. Type 'R' to restore the permission and the re
 choice  /c dcre /m "> "
 If %errorlevel%==1 goto DeleteRegistry
 If %errorlevel%==2 goto ReplaceFont
-If %errorlevel%==3 goto restoreAnything
+If %errorlevel%==3 goto restoreWarning
 If %errorlevel%==4 goto End
+
+
+:restoreWarning
+echo Please make sure there's a file acl(which is a backup of the permission) in current directory.
+echo If you don't have any, e.g. you deleted it, please generate a new one with another machine.
+echo For details check our documents(WIP).
+echo.
+echo Press any key to continue, or close this windows right now.
+pause>nul
+goto restoreEverything
 
 :DeleteRegistry
 echo Now we will delete the registry.
@@ -59,36 +70,15 @@ echo Do not use the path including Space!!! this will cause error!!!
 echo If you want to use the font in current directory, Please type 'skip'.
 echo.
 set /p fontLocation="> "
+if %fontLocation%==skip set fontLocation=%~dp0
+echo Got it. %fontLocation%, right?
+goto replaceProcess
 
-pause
-echo We will now check if it's exist.
-
-if %fontLocation% == "skip" set fontLocation=%~dp0
-
-if exist %fontLocation% (
-    echo Check: Directory exists.
-    set checkPassed=0
-) else (
-    set checkPassed=1
-)
-
-
-if %checkPassed% neq 0 (
-    echo Sorry, But the required file does not exist. Error Code is %checkPassed%.
-    echo Please press any key to try again.
-    pause>nul
-    goto ReplaceFont
-) else (
-    echo The Directory is valid.
-    echo Now going to replace process..
-    goto replaceProcess
-)
-goto Error
 
 :replaceProcess
 echo Now we'll start to replace font. 
 echo THIS MAY HURT YOUR SYSTEM!! USE IT AT YOUR OWN RISK!!
-echo Press any key to start. BE SURE TO HAVE A BACKUP!!
+echo Press any key to start. 
 pause>nul
 echo. & echo.
 echo ------------------------------------------------
@@ -113,7 +103,7 @@ if exist C:\Windows\Fonts\msyh* (
     echo Also check that did you do anything wrong, too.
     echo.
     echo Your system is not BOOM-ed and you can continue to use without fearing.
-    echo If you deleted registry and want to recovery it, Run this script again and type 'R' in the first selection. This will recovery your registry.
+    echo If you deleted registry and want to recovery it, Run this script again and type 'R' in the first selection. This will recovery them.
     pause>nul
     goto End
 ) else (
@@ -129,7 +119,7 @@ takeown /F C:\Windows\Fonts\msyh* /A
 icacls C:\Windows\Fonts\msyh* /grant Administrators:F
 timeout /t 3
 
-:restoreAnything
+:restoreEverything
 echo Recovering the permission from backup..
 icacls C:\windows\Fonts\msyh* /C /setowner "NT SERVICE\TrustedInstaller"
 icacls C:\windows\Fonts\ /C /restore "%~dp0\acl"
