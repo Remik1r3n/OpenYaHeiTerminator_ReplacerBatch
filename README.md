@@ -1,12 +1,12 @@
 ## Open YaHei Terminator Project - Batch replacer
 
-This is the replacer for Microsoft YaHei, if you already had a patched font that ready to replace.
+This is a replace tool for Microsoft YaHei if you already have a patched font ready to be replaced into your system.
 
-The Administrator permission is required to replace. 
+The replacement process requires administrator privileges.
 
-You don't need a Windows PE or something to use this script, but you may have to log out for 2 times.
+You don't need Windows PE or other tools to use this script, but you may need to log out 2 times.
 
-Still in development, may containing unknown bugs. use it as your own risk!
+Still in development and may contain unknown bugs. Use it at your own risk!
 
 ## Thanks
 This project is based on https://github.com/Moeologist/font-hack. 
