@@ -66,7 +66,7 @@ echo Please tell me where the font is.
 echo Three files are required: msyh.ttc, msyhbd.ttc and msyhl.ttc.
 echo Place them in a same directory, and please type the location of the directory.
 echo.
-echo Do not use the path including Space!!! this will cause error!!!
+echo Do not use the path including Space! this will cause error!
 echo If you want to use the font in current directory, Please type 'skip'.
 echo.
 set /p fontLocation="> "
@@ -77,7 +77,7 @@ goto replaceProcess
 
 :replaceProcess
 echo Now we'll start to replace font. 
-echo THIS MAY HURT YOUR SYSTEM!! USE IT AT YOUR OWN RISK!!
+echo THIS MAY HURT YOUR SYSTEM! USE IT AT YOUR OWN RISK!
 echo Press any key to start. 
 pause>nul
 echo. & echo.
